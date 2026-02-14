@@ -32,6 +32,7 @@ typedef struct command_t {
 
 path_node_t *path_node_head;
 float direction = DIRECTION_START;
+Vector2 origin = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
 Vector2 cur_pos = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
 
 path_t create_path(Vector2 source, Vector2 destination) {
@@ -109,6 +110,39 @@ void eval_bk(char *val_str) {
     path_t path = create_path(cur_pos, new_pos);
     add_path(path);
     cur_pos = new_pos;
+}
+
+void eval_rt(char *val_str) {
+    char *endptr;
+    float val = strtof(val_str, endptr);
+
+    errno = 0;
+    if (errno != 0 || *endptr != '\0') {
+        return;
+    }
+
+    direction += val;
+}
+
+void eval_lt(char *val_str) {
+    char *endptr;
+    float val = strtof(val_str, endptr);
+
+    errno = 0;
+    if (errno != 0 || *endptr != '\0') {
+        return;
+    }
+
+    direction -= val;
+}
+
+void eval_home() {
+    cur_pos = origin;
+    direction = DIRECTION_START;
+}
+
+void eval_setpos(char *val_x, char *val_y) {
+
 }
 
 
