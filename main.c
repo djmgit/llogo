@@ -84,7 +84,7 @@ command_t parse_command(char *command_str) {
 
 void eval_fd(char *val_str) {
     char *endptr;
-    float val = strtof(val_str, endptr);
+    float val = strtof(val_str, &endptr);
 
     errno = 0;
     if (errno != 0 || *endptr != '\0') {
@@ -99,7 +99,7 @@ void eval_fd(char *val_str) {
 
 void eval_bk(char *val_str) {
     char *endptr;
-    float val = strtof(val_str, endptr);
+    float val = strtof(val_str, &endptr);
 
     errno = 0;
     if (errno != 0 || *endptr != '\0') {
@@ -114,7 +114,7 @@ void eval_bk(char *val_str) {
 
 void eval_rt(char *val_str) {
     char *endptr;
-    float val = strtof(val_str, endptr);
+    float val = strtof(val_str, &endptr);
 
     errno = 0;
     if (errno != 0 || *endptr != '\0') {
@@ -126,7 +126,7 @@ void eval_rt(char *val_str) {
 
 void eval_lt(char *val_str) {
     char *endptr;
-    float val = strtof(val_str, endptr);
+    float val = strtof(val_str, &endptr);
 
     errno = 0;
     if (errno != 0 || *endptr != '\0') {
