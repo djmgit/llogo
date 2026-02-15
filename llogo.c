@@ -1,6 +1,5 @@
 #include "include/llogo.h"
 
-
 path_node_t *path_node_head;
 float direction = DIRECTION_START;
 Vector2 origin = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
@@ -30,29 +29,6 @@ void add_path(path_t path) {
 
     t_pnode->next = create_path_node(path);
 }
-
-command_t parse_command(char *command_str) {
-    command_t command;
-
-    const char *delimiters = " ";
-    char *token;
-
-    token = strtok(command_str, delimiters);
-    if (token == NULL) {
-        return command;
-    }
-    strcpy(command.op, token);
-
-    token = strtok(NULL, delimiters);
-    if (token == NULL) {
-        return command;
-    }
-
-    strcpy(command.val, token);
-
-    return command;
-}
-
 int eval_fd(char *val_str) {
     char *endptr;
     float val = strtof(val_str, &endptr);
@@ -147,46 +123,27 @@ void eval_setxy(char *val_xy) {
 
     cur_pos.x = pos_x;
     cur_pos.y = pos_y;
-    
+
 }
 
+command_t parse_command(char *command_str) {
+    command_t command;
 
-int main()
-{
-    InitWindow(800, 450, "Raylib - Move Along Angle");
-    Vector2 position = { 400.0f, 225.0f };
-    float speed = 300.0f;
-    float angle = -90.0f; // 0 is right, 90 is down
-    SetTargetFPS(60);
+    const char *delimiters = " ";
+    char *token;
 
-    Vector2 position_source = { 400.0f, 225.0f };
-
-    float length = 50.0;
-    Vector2 position_destination = {position_source.x + cosf(angle * DEG2RAD) * length, position_source.y + sinf(angle * DEG2RAD) * length};
-
-
-    while (!WindowShouldClose()) {
-        // Update angle (rotating with arrow keys)
-        if (IsKeyDown(KEY_LEFT)) angle -= 3.0f;
-        if (IsKeyDown(KEY_RIGHT)) angle += 3.0f;
-
-        position_destination.x = position_source.x + cosf(angle * DEG2RAD) * length;
-        position_destination.y = position_source.y + sinf(angle * DEG2RAD) * length;
-
-        // Move forward in the current angle direction
-        if (IsKeyDown(KEY_UP)) {
-            position.x += cosf(angle * DEG2RAD) * speed * GetFrameTime();
-            position.y += sinf(angle * DEG2RAD) * speed * GetFrameTime();
-        }
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        // Draw object (a triangle pointing right, rotated)
-        DrawPoly(position, 3, 20, angle, MAROON);
-        DrawText("Use Arrows to Rotate/Move", 10, 10, 20, DARKGRAY);
-        DrawLineV(position_source, position_destination, BLACK);
-        EndDrawing();
+    token = strtok(command_str, delimiters);
+    if (token == NULL) {
+        return command;
     }
-    CloseWindow();
-    return 0;
+    strcpy(command.op, token);
+
+    token = strtok(NULL, delimiters);
+    if (token == NULL) {
+        return command;
+    }
+
+    strcpy(command.val, token);
+
+    return command;
 }
