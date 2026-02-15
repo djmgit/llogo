@@ -128,9 +128,10 @@ void eval_setxy(char *val_xy) {
 
 command_t parse_command(char *command_str) {
     command_t command;
+    memset(&command, 0, sizeof(command));
 
     const char *delimiters = " ";
-    char *token;
+    char *token = NULL;
 
     token = strtok(command_str, delimiters);
     if (token == NULL) {
@@ -138,12 +139,20 @@ command_t parse_command(char *command_str) {
     }
     strcpy(command.op, token);
 
-    token = strtok(NULL, delimiters);
-    if (token == NULL) {
+    if (strcmp(command.op, "fd") == 0 ||
+        strcmp(command.op, "bk") == 0 ||
+        strcmp(command.op, "rt") == 0 ||
+        strcmp(command.op, "lt") == 0 ||
+        strcmp(command.op, "setxy") == 0) {
+            token = strtok(NULL, delimiters);
+            if (token == NULL) {
+                return command;
+            }
+
+            strcpy(command.val, token);
+    } else if (strcpy(command.val, "home") == 0) {
         return command;
     }
-
-    strcpy(command.val, token);
 
     return command;
 }
