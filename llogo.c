@@ -31,6 +31,9 @@ void add_path(path_t path) {
 }
 int eval_fd(char *val_str) {
     char *endptr;
+    if (strlen(val_str) == 0) {
+        return -1;
+    }
     float val = strtof(val_str, &endptr);
 
     errno = 0;
@@ -46,7 +49,11 @@ int eval_fd(char *val_str) {
     return 0;
 }
 
-void eval_bk(char *val_str) {
+int eval_bk(char *val_str) {
+    if (strlen(val_str) == 0) {
+        return -1;
+    }
+
     char *endptr;
     float val = strtof(val_str, &endptr);
 
@@ -63,7 +70,11 @@ void eval_bk(char *val_str) {
     return 0;
 }
 
-void eval_rt(char *val_str) {
+int eval_rt(char *val_str) {
+    if (strlen(val_str) == 0) {
+        return -1;
+    }
+
     char *endptr;
     float val = strtof(val_str, &endptr);
 
@@ -77,7 +88,11 @@ void eval_rt(char *val_str) {
     return 0;
 }
 
-void eval_lt(char *val_str) {
+int eval_lt(char *val_str) {
+    if (strlen(val_str) == 0) {
+        return -1;
+    }
+
     char *endptr;
     float val = strtof(val_str, &endptr);
 
@@ -91,12 +106,18 @@ void eval_lt(char *val_str) {
     return 0;
 }
 
-void eval_home() {
+int eval_home() {
     cur_pos = origin;
     direction = DIRECTION_START;
+
+    return 0;
 }
 
-void eval_setxy(char *val_xy) {
+int eval_setxy(char *val_xy) {
+    if (strlen(val_xy) == 0) {
+        return -1;
+    }
+
     char *endptr;
     errno = 0;
     const char *delimiters = " ";
@@ -124,6 +145,8 @@ void eval_setxy(char *val_xy) {
     cur_pos.x = pos_x;
     cur_pos.y = pos_y;
 
+    return 0;
+
 }
 
 command_t parse_command(char *command_str) {
@@ -150,9 +173,43 @@ command_t parse_command(char *command_str) {
             }
 
             strcpy(command.val, token);
-    } else if (strcpy(command.val, "home") == 0) {
+    } else if (strcmp(command.val, "home") == 0) {
         return command;
     }
 
     return command;
+}
+
+int evaluate_command(char *command_str) {
+    command_t command = parse_command(command_str);
+
+    if (strlen(command.op) == 0) {
+        return -1;
+    }
+
+    if (strcmp(command.op, "fd") == 0) {
+        return eval_fd(command.val);
+    }
+
+    if (strcmp(command.op, "bk") == 0) {
+        return eval_bk(command.val);
+    }
+
+    if (strcmp(command.op, "rt") == 0) {
+        return eval_rt(command.val);
+    }
+
+    if (strcmp(command.op, "lt") == 0) {
+        return eval_lt(command.val);
+    }
+
+    if (strcmp(command.op, "home") == 0) {
+        return eval_home(command.val);
+    }
+
+    if (strcmp(command.op, "setxy") == 0) {
+        return eval_setxy(command.val);
+    }
+
+    return -1;
 }
