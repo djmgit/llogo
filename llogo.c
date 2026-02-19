@@ -29,6 +29,15 @@ void add_path(path_t path) {
 
     t_pnode->next = create_path_node(path);
 }
+
+void show_all_paths() {
+    path_node_t *t_pnode = path_node_head;
+    while (t_pnode != NULL) {
+        printf("(%f, %f) -> (%f, %f)\n", t_pnode->path.source.x, t_pnode->path.source.y, t_pnode->path.destination.x, t_pnode->path.destination.y);
+        t_pnode = t_pnode->next;
+    } 
+}
+
 int eval_fd(char *val_str) {
     char *endptr;
     if (strlen(val_str) == 0) {

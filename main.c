@@ -1,156 +1,7 @@
 #include "include/llogo.h"
 
-
-path_node_t *path_node_head;
-float direction = DIRECTION_START;
-Vector2 origin = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
-Vector2 cur_pos = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
-
-path_t create_path(Vector2 source, Vector2 destination) {
-    return (path_t){.source = source, .destination = destination};
-}
-
-path_node_t *create_path_node(path_t path) {
-    path_node_t *p_node = (path_node_t *)malloc(sizeof(path_node_t));
-    p_node->path = path;
-    p_node->next = NULL;
-    return p_node;
-}
-
-void add_path(path_t path) {
-    if (path_node_head == NULL) {
-       path_node_head = create_path_node(path);
-       return;
-    }
-
-    path_node_t *t_pnode = path_node_head;
-    while (t_pnode->next != NULL) {
-        t_pnode = t_pnode->next;
-    }
-
-    t_pnode->next = create_path_node(path);
-}
-
-command_t parse_command(char *command_str) {
-    command_t command;
-
-    const char *delimiters = " ";
-    char *token;
-
-    token = strtok(command_str, delimiters);
-    if (token == NULL) {
-        return command;
-    }
-    strcpy(command.op, token);
-
-    token = strtok(NULL, delimiters);
-    if (token == NULL) {
-        return command;
-    }
-
-    strcpy(command.val, token);
-
-    return command;
-}
-
-int eval_fd(char *val_str) {
-    char *endptr;
-    float val = strtof(val_str, &endptr);
-
-    errno = 0;
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    Vector2 new_pos = {cur_pos.x + cosf(direction * DEG2RAD) * val, cur_pos.y + sinf(direction * DEG2RAD) * val};
-    path_t path = create_path(cur_pos, new_pos);
-    add_path(path);
-    cur_pos = new_pos;
-
-    return 0;
-}
-
-void eval_bk(char *val_str) {
-    char *endptr;
-    float val = strtof(val_str, &endptr);
-
-    errno = 0;
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    Vector2 new_pos = {cur_pos.x - cosf(direction * DEG2RAD) * val, cur_pos.y - sinf(direction * DEG2RAD) * val};
-    path_t path = create_path(cur_pos, new_pos);
-    add_path(path);
-    cur_pos = new_pos;
-
-    return 0;
-}
-
-void eval_rt(char *val_str) {
-    char *endptr;
-    float val = strtof(val_str, &endptr);
-
-    errno = 0;
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    direction += val;
-
-    return 0;
-}
-
-void eval_lt(char *val_str) {
-    char *endptr;
-    float val = strtof(val_str, &endptr);
-
-    errno = 0;
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    direction -= val;
-
-    return 0;
-}
-
-void eval_home() {
-    cur_pos = origin;
-    direction = DIRECTION_START;
-}
-
-void eval_setxy(char *val_xy) {
-    char *endptr;
-    errno = 0;
-    const char *delimiters = " ";
-
-    char *val_x = strtok(NULL, delimiters);
-    if (val_x  == NULL) {
-        return -1;
-    }
-
-    float pos_x = strtof(val_x, &endptr);
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    char *val_y = strtok(NULL, delimiters);
-    if (val_y == NULL) {
-        return -1;
-    }
-
-    float pos_y = strtof(val_y, &endptr);
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    }
-
-    cur_pos.x = pos_x;
-    cur_pos.y = pos_y;
-    
-}
-
-
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 int main()
 {
     InitWindow(800, 450, "Raylib - Move Along Angle");
@@ -164,6 +15,11 @@ int main()
     float length = 50.0;
     Vector2 position_destination = {position_source.x + cosf(angle * DEG2RAD) * length, position_source.y + sinf(angle * DEG2RAD) * length};
 
+    evaluate_command("fd 40");
+    //evaluate_command("rt 90");
+    //evaluate_command("fd 40");
+    //evaluate_command("rt 90");
+    //evaluate_command("fd 40");
 
     while (!WindowShouldClose()) {
         // Update angle (rotating with arrow keys)

@@ -1,11 +1,12 @@
+#ifndef LLOGO_HEADER_H
+#define LLOGO_HEADER_H
+
 #include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include "raylib.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 #include  "raymath.h"
 
 #define DIRECTION_START -90.0f
@@ -33,10 +34,14 @@ path_t create_path(Vector2, Vector2);
 path_node_t *create_path_node(path_t);
 void add_path(path_t path);
 command_t parse_command(char *);
+int evaluate_command(char *);
 int eval_fd(char *);
-void eval_bk(char *);
-void eval_rt(char *);
-void eval_lt(char *);
-void eval_home();
-void eval_setxy(char *);
+int eval_bk(char *);
+int eval_rt(char *);
+int eval_lt(char *);
+int eval_home();
+int eval_setxy(char *);
+void show_all_paths();
+
+#endif
 
