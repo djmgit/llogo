@@ -4,13 +4,13 @@
 #include "raygui.h"
 int main()
 {
-    InitWindow(800, 450, "Raylib - Move Along Angle");
-    Vector2 position = { SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0 };
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib - Move Along Angle");
+    Vector2 position = { CANVAS_WIDTH / 2.0, CANVAS_HEIGHT / 2.0 };
     float speed = 300.0f;
     float angle = -90.0f; // 0 is right, 90 is down
     SetTargetFPS(60);
 
-    Vector2 position_source = { SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0 };
+    Vector2 position_source = { CANVAS_WIDTH / 2.0, CANVAS_HEIGHT / 2.0 };
 
     float length = 50.0;
     Vector2 position_destination = {position_source.x + cosf(angle * DEG2RAD) * length, position_source.y + sinf(angle * DEG2RAD) * length};
@@ -43,6 +43,7 @@ int main()
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        DrawRectangleLines(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, BLACK);
         // Draw object (a triangle pointing right, rotated)
         DrawPoly(position, 3, 20, angle, MAROON);
         DrawText("Use Arrows to Rotate/Move", 10, 10, 20, DARKGRAY);
