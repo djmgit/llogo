@@ -162,6 +162,7 @@ command_t parse_command(char *command_str) {
     command_t command;
     memset(&command, 0, sizeof(command));
 
+
     const char *delimiters = " ";
     char *token = NULL;
 
@@ -169,6 +170,7 @@ command_t parse_command(char *command_str) {
     if (token == NULL) {
         return command;
     }
+
     strcpy(command.op, token);
 
     if (strcmp(command.op, "fd") == 0 ||

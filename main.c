@@ -5,19 +5,25 @@
 int main()
 {
     InitWindow(800, 450, "Raylib - Move Along Angle");
-    Vector2 position = { 400.0f, 225.0f };
+    Vector2 position = { SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0 };
     float speed = 300.0f;
     float angle = -90.0f; // 0 is right, 90 is down
     SetTargetFPS(60);
 
-    Vector2 position_source = { 400.0f, 225.0f };
+    Vector2 position_source = { SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0 };
 
     float length = 50.0;
     Vector2 position_destination = {position_source.x + cosf(angle * DEG2RAD) * length, position_source.y + sinf(angle * DEG2RAD) * length};
 
-    evaluate_command("fd 40");
-    //evaluate_command("rt 90");
-    //evaluate_command("fd 40");
+    char command[100] = "fd 40";
+    evaluate_command(command);
+    memset(command, '\0', strlen(command));
+    strcpy(command, "rt 90");
+    evaluate_command(command);
+    memset(command, '\0', strlen(command));
+    strcpy(command, "fd 40");
+    evaluate_command(command);
+    show_all_paths();
     //evaluate_command("rt 90");
     //evaluate_command("fd 40");
 

@@ -10,8 +10,8 @@
 #include  "raymath.h"
 
 #define DIRECTION_START -90.0f
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 450
+#define SCREEN_WIDTH 800.0f
+#define SCREEN_HEIGHT 450.0f
 
 typedef struct path_t {
     Vector2 source;
