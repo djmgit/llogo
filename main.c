@@ -5,49 +5,61 @@
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib - Move Along Angle");
+    init_llogo();
+    char *log = get_command_log();
     Vector2 position = { CANVAS_WIDTH / 2.0, CANVAS_HEIGHT / 2.0 };
-    float speed = 300.0f;
-    float angle = -90.0f; // 0 is right, 90 is down
-    SetTargetFPS(60);
 
-    Vector2 position_source = { CANVAS_WIDTH / 2.0, CANVAS_HEIGHT / 2.0 };
+    char command_input[64] = "";
+    bool command_box_edit_mode = false;
 
-    float length = 50.0;
-    Vector2 position_destination = {position_source.x + cosf(angle * DEG2RAD) * length, position_source.y + sinf(angle * DEG2RAD) * length};
+    int command_box_width = 180;
+    int command_box_height = 40;
+    int command_box_x = 40;
+    int command_box_y = CANVAS_HEIGHT + 40;
 
-    char command[100] = "fd 40";
-    evaluate_command(command);
-    memset(command, '\0', strlen(command));
-    strcpy(command, "rt 90");
-    evaluate_command(command);
-    memset(command, '\0', strlen(command));
-    strcpy(command, "fd 40");
-    evaluate_command(command);
-    show_all_paths();
-    //evaluate_command("rt 90");
-    //evaluate_command("fd 40");
+    int log_box_width = 300;
+    int log_box_height = 200;
+    int log_box_x = CANVAS_WIDTH / 2.0;
+    int log_box_y = CANVAS_HEIGHT + 40;
+
+    Rectangle log_rectangle = (Rectangle){log_box_x, log_box_y, log_box_width, log_box_height};
+
 
     while (!WindowShouldClose()) {
-        // Update angle (rotating with arrow keys)
-        if (IsKeyDown(KEY_LEFT)) angle -= 3.0f;
-        if (IsKeyDown(KEY_RIGHT)) angle += 3.0f;
 
-        position_destination.x = position_source.x + cosf(angle * DEG2RAD) * length;
-        position_destination.y = position_source.y + sinf(angle * DEG2RAD) * length;
-
-        // Move forward in the current angle direction
-        if (IsKeyDown(KEY_UP)) {
-            position.x += cosf(angle * DEG2RAD) * speed * GetFrameTime();
-            position.y += sinf(angle * DEG2RAD) * speed * GetFrameTime();
+        if (command_box_edit_mode) {
+            if (IsKeyPressed(KEY_ENTER)) {
+                if (strlen(command_input) != 0) {
+                    evaluate_command(command_input);
+                    memset(command_input, 0, strlen(command_input));
+                }
+            }
         }
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawRectangleLines(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, BLACK);
-        // Draw object (a triangle pointing right, rotated)
-        DrawPoly(position, 3, 20, angle, MAROON);
-        DrawText("Use Arrows to Rotate/Move", 10, 10, 20, DARKGRAY);
-        DrawLineV(position_source, position_destination, BLACK);
+
+        path_node_t *t_pnode = get_path_head();
+        while (t_pnode != NULL) {
+            DrawLine(t_pnode->path.source.x, t_pnode->path.source.y, t_pnode->path.destination.x, t_pnode->path.destination.y, BLACK);
+            t_pnode = t_pnode->next;
+        } 
+
+        DrawPoly(get_cur_pos(), 3, 10, get_cur_dir(), MAROON);
+
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 22);
+        if (GuiTextBox((Rectangle){ command_box_x, command_box_y, command_box_width, command_box_height}, command_input, 64, command_box_edit_mode)) {
+            command_box_edit_mode = !command_box_edit_mode;
+        };
+
+        GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_TOP);   // WARNING: Word-wrap does not work as expected in case of no-top alignment
+        GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);            // WARNING: If wrap mode enabled, text editing is not supported
+        GuiTextBox(log_rectangle, log, 1024*1024, false);
+        GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_NONE);
+        GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_MIDDLE);
+        
+        //DrawText(command_input, 10, 10, 20, DARKGRAY);
         EndDrawing();
     }
     CloseWindow();

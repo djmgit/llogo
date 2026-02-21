@@ -2,11 +2,25 @@
 
 path_node_t *path_node_head;
 float direction = DIRECTION_START;
-Vector2 origin = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
-Vector2 cur_pos = { SCREEN_WIDTH*1.0f / 2, SCREEN_HEIGHT*1.0f / 2 };
+Vector2 origin = { CANVAS_WIDTH*1.0f / 2, CANVAS_HEIGHT*1.0f / 2 };
+Vector2 cur_pos = { CANVAS_WIDTH*1.0f / 2, CANVAS_HEIGHT*1.0f / 2 };
+
+char *command_log;
 
 path_t create_path(Vector2 source, Vector2 destination) {
     return (path_t){.source = source, .destination = destination};
+}
+
+Vector2 get_cur_pos() {
+    return cur_pos;
+}
+
+float get_cur_dir() {
+    return direction;
+}
+
+path_node_t* get_path_head() {
+    return path_node_head;
 }
 
 path_node_t *create_path_node(path_t path) {
@@ -14,6 +28,20 @@ path_node_t *create_path_node(path_t path) {
     p_node->path = path;
     p_node->next = NULL;
     return p_node;
+}
+
+void init_llogo() {
+    command_log = (char *)malloc(sizeof(char) * 1024 * 1024);
+    memset(command_log, 0, 1024 * 1024);
+}
+
+char* get_command_log() {
+    return command_log;
+}
+
+void log_command(char *command_str) {
+    strcat(command_log, "\n\n");
+    strcat(command_log, command_str);
 }
 
 void add_path(path_t path) {
@@ -192,6 +220,7 @@ command_t parse_command(char *command_str) {
 }
 
 int evaluate_command(char *command_str) {
+    log_command(command_str);
     command_t command = parse_command(command_str);
 
     if (strlen(command.op) == 0) {

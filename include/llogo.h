@@ -33,7 +33,13 @@ typedef struct command_t {
     char val[100];
 } command_t;
 
+Vector2 get_cur_pos();
+float get_cur_dir();
+void init_llogo();
+char* get_command_log();
+void log_command();
 path_t create_path(Vector2, Vector2);
+path_node_t* get_path_head();
 path_node_t *create_path_node(path_t);
 void add_path(path_t path);
 command_t parse_command(char *);
