@@ -18,11 +18,18 @@ int main()
     int command_box_y = CANVAS_HEIGHT + 40;
 
     int log_box_width = 300;
-    int log_box_height = 200;
+    int log_box_height = 160;
     int log_box_x = CANVAS_WIDTH / 2.0;
     int log_box_y = CANVAS_HEIGHT + 40;
 
+    int log_content_box_width = 600;
+    int log_content_box_height = 800;
+
+    Rectangle panelView = { 0 };
+    Vector2 panelScroll = { 1.0, 0.0 };
+
     Rectangle log_rectangle = (Rectangle){log_box_x, log_box_y, log_box_width, log_box_height};
+    Rectangle log_content_rectangle = (Rectangle){0, 0, log_content_box_width, log_content_box_height};
 
 
     while (!WindowShouldClose()) {
@@ -53,11 +60,18 @@ int main()
             command_box_edit_mode = !command_box_edit_mode;
         };
 
-        GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_TOP);   // WARNING: Word-wrap does not work as expected in case of no-top alignment
-        GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);            // WARNING: If wrap mode enabled, text editing is not supported
-        GuiTextBox(log_rectangle, log, 1024*1024, false);
-        GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_NONE);
-        GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_MIDDLE);
+        
+
+        GuiScrollPanel(log_rectangle, NULL, log_content_rectangle, &panelScroll, &panelView);
+
+        BeginScissorMode(panelView.x, panelView.y, panelView.width, panelView.height);
+            GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_TOP);   // WARNING: Word-wrap does not work as expected in case of no-top alignment
+            GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);            // WARNING: If wrap mode enabled, text editing is not supported
+            GuiTextBox((Rectangle){log_rectangle.x + panelScroll.x, log_rectangle.y + panelScroll.y, log_content_rectangle.width, log_content_rectangle.height}, log, 1024*1024, false);
+            GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_NONE);
+            GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_MIDDLE);
+        EndScissorMode();
+
         
         //DrawText(command_input, 10, 10, 20, DARKGRAY);
         EndDrawing();
