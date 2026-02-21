@@ -45,7 +45,7 @@ int main()
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawRectangleLines(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, BLACK);
+        DrawRectangleLinesEx((Rectangle){0, 0, CANVAS_WIDTH, CANVAS_HEIGHT}, 4.0, BLACK);
 
         path_node_t *t_pnode = get_path_head();
         while (t_pnode != NULL) {
