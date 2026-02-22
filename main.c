@@ -12,15 +12,25 @@ int main()
     char command_input[64] = "";
     bool command_box_edit_mode = false;
 
-    int command_box_width = 180;
+    int command_box_label_x = 40;
+    int command_box_label_y = CANVAS_HEIGHT + 14;
+    int command_box_label_width = 140;
+    int command_box_label_height = 16;
+
+    int command_box_width = 220;
     int command_box_height = 40;
     int command_box_x = 40;
-    int command_box_y = CANVAS_HEIGHT + 40;
+    int command_box_y = CANVAS_HEIGHT + command_box_label_height + 24;
+
+    int log_label_x = CANVAS_WIDTH / 2.0;
+    int log_label_y = CANVAS_HEIGHT + 14;
+    int log_label_width = 140;
+    int log_label_height = 16;
 
     int log_box_width = 300;
     int log_box_height = 160;
     int log_box_x = CANVAS_WIDTH / 2.0;
-    int log_box_y = CANVAS_HEIGHT + 40;
+    int log_box_y = CANVAS_HEIGHT + log_label_height + 24;
 
     int log_content_box_width = 600;
     int log_content_box_height = 800;
@@ -55,15 +65,17 @@ int main()
 
         DrawPoly(get_cur_pos(), 3, 10, get_cur_dir(), MAROON);
 
+        GuiLabel((Rectangle){command_box_label_x, command_box_label_y, command_box_label_width, command_box_label_height}, "Enter command");
         GuiSetStyle(DEFAULT, TEXT_SIZE, 22);
         if (GuiTextBox((Rectangle){ command_box_x, command_box_y, command_box_width, command_box_height}, command_input, 64, command_box_edit_mode)) {
             command_box_edit_mode = !command_box_edit_mode;
         };
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+
 
         
-
+        GuiLabel((Rectangle){log_label_x, log_label_y, log_label_width, log_label_height}, "History");
         GuiScrollPanel(log_rectangle, NULL, log_content_rectangle, &panelScroll, &panelView);
-
         BeginScissorMode(panelView.x, panelView.y, panelView.width, panelView.height);
             GuiSetStyle(DEFAULT, TEXT_ALIGNMENT_VERTICAL, TEXT_ALIGN_TOP);   // WARNING: Word-wrap does not work as expected in case of no-top alignment
             GuiSetStyle(DEFAULT, TEXT_WRAP_MODE, TEXT_WRAP_WORD);            // WARNING: If wrap mode enabled, text editing is not supported
