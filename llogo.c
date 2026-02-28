@@ -159,7 +159,7 @@ int eval_setxy(char *val_xy) {
     errno = 0;
     const char *delimiters = " ";
 
-    char *val_x = strtok(NULL, delimiters);
+    char *val_x = strtok(val_xy, delimiters);
     if (val_x  == NULL) {
         return -1;
     }
@@ -171,6 +171,7 @@ int eval_setxy(char *val_xy) {
 
     char *val_y = strtok(NULL, delimiters);
     if (val_y == NULL) {
+        printf("akksdkljaskldasdlasjdkl\n");
         return -1;
     }
 
@@ -190,28 +191,35 @@ command_t parse_command(char *command_str) {
     command_t command;
     memset(&command, 0, sizeof(command));
 
-
-    const char *delimiters = " ";
-    char *token = NULL;
-
-    token = strtok(command_str, delimiters);
-    if (token == NULL) {
-        return command;
+    while (*command_str == ' ') {
+        command_str += 1;
     }
 
-    strcpy(command.op, token);
+    char op[20];
+    int op_len = 0;
+    
+    while (*command_str != ' ') {
+        *(op + op_len) = *command_str;
+        op_len += 1;
+        command_str += 1;
+    }
+
+    *(op + op_len) = '\0';
+
+    strcpy(command.op, op);
+
+    while (*command_str == ' ') {
+        command_str += 1;
+    }
+
 
     if (strcmp(command.op, "fd") == 0 ||
         strcmp(command.op, "bk") == 0 ||
         strcmp(command.op, "rt") == 0 ||
         strcmp(command.op, "lt") == 0 ||
         strcmp(command.op, "setxy") == 0) {
-            token = strtok(NULL, delimiters);
-            if (token == NULL) {
-                return command;
-            }
 
-            strcpy(command.val, token);
+            strcpy(command.val, command_str);
     } else if (strcmp(command.val, "home") == 0) {
         return command;
     }

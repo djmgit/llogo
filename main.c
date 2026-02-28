@@ -59,7 +59,7 @@ int main()
 
         path_node_t *t_pnode = get_path_head();
         while (t_pnode != NULL) {
-            DrawLine(t_pnode->path.source.x, t_pnode->path.source.y, t_pnode->path.destination.x, t_pnode->path.destination.y, BLACK);
+            DrawLineEx(t_pnode->path.source, t_pnode->path.destination, 4.0, BLACK);
             t_pnode = t_pnode->next;
         } 
 
