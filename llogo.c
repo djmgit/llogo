@@ -66,6 +66,14 @@ void show_all_paths() {
     } 
 }
 
+int check_in_canvas(Vector2 pos) {
+    if (pos.x < 0 || pos.x > CANVAS_WIDTH || pos.y < 0 || pos.y > CANVAS_HEIGHT) {
+        return false;
+    }
+
+    return true;
+}
+
 int eval_fd(char *val_str) {
     char *endptr;
     if (strlen(val_str) == 0) {
@@ -79,6 +87,9 @@ int eval_fd(char *val_str) {
     }
 
     Vector2 new_pos = {cur_pos.x + cosf(direction * DEG2RAD) * val, cur_pos.y + sinf(direction * DEG2RAD) * val};
+    if (check_in_canvas(new_pos) == false) {
+        return -1;
+    }
     path_t path = create_path(cur_pos, new_pos);
     add_path(path);
     cur_pos = new_pos;
@@ -100,6 +111,9 @@ int eval_bk(char *val_str) {
     }
 
     Vector2 new_pos = {cur_pos.x - cosf(direction * DEG2RAD) * val, cur_pos.y - sinf(direction * DEG2RAD) * val};
+    if (check_in_canvas(new_pos) == false) {
+        return -1;
+    }
     path_t path = create_path(cur_pos, new_pos);
     add_path(path);
     cur_pos = new_pos;
