@@ -55,7 +55,9 @@ int main()
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawRectangleLinesEx((Rectangle){0, 0, CANVAS_WIDTH, CANVAS_HEIGHT}, 4.0, BLACK);
+        GuiGroupBox((Rectangle){ 0, CANVAS_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - CANVAS_HEIGHT}, "Command Control");
+
+        //DrawRectangleLinesEx((Rectangle){0, 0, CANVAS_WIDTH, CANVAS_HEIGHT}, 4.0, BLACK);
 
         path_node_t *t_pnode = get_path_head();
         while (t_pnode != NULL) {

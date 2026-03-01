@@ -171,7 +171,6 @@ int eval_setxy(char *val_xy) {
 
     char *val_y = strtok(NULL, delimiters);
     if (val_y == NULL) {
-        printf("akksdkljaskldasdlasjdkl\n");
         return -1;
     }
 
@@ -198,7 +197,7 @@ command_t parse_command(char *command_str) {
     char op[20];
     int op_len = 0;
     
-    while (*command_str != ' ') {
+    while ((*command_str != ' ') && (*command_str != '\0')) {
         *(op + op_len) = *command_str;
         op_len += 1;
         command_str += 1;
@@ -212,16 +211,13 @@ command_t parse_command(char *command_str) {
         command_str += 1;
     }
 
-
     if (strcmp(command.op, "fd") == 0 ||
         strcmp(command.op, "bk") == 0 ||
         strcmp(command.op, "rt") == 0 ||
         strcmp(command.op, "lt") == 0 ||
         strcmp(command.op, "setxy") == 0) {
-
-            strcpy(command.val, command_str);
-    } else if (strcmp(command.val, "home") == 0) {
-        return command;
+        
+        strcpy(command.val, command_str);
     }
 
     return command;
@@ -230,6 +226,7 @@ command_t parse_command(char *command_str) {
 int evaluate_command(char *command_str) {
     log_command(command_str);
     command_t command = parse_command(command_str);
+
 
     if (strlen(command.op) == 0) {
         return -1;
@@ -252,7 +249,7 @@ int evaluate_command(char *command_str) {
     }
 
     if (strcmp(command.op, "home") == 0) {
-        return eval_home(command.val);
+        return eval_home();
     }
 
     if (strcmp(command.op, "setxy") == 0) {
