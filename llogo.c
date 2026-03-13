@@ -76,12 +76,12 @@ int check_in_canvas(Vector2 pos) {
 
 int eval_fd(char *val_str) {
     char *endptr;
+    errno = 0;
     if (strlen(val_str) == 0) {
         return -1;
     }
     float val = strtof(val_str, &endptr);
 
-    errno = 0;
     if (errno != 0 || *endptr != '\0') {
         return -1;
     }
@@ -103,9 +103,9 @@ int eval_bk(char *val_str) {
     }
 
     char *endptr;
+    errno = 0;
     float val = strtof(val_str, &endptr);
 
-    errno = 0;
     if (errno != 0 || *endptr != '\0') {
         return -1;
     }
@@ -127,9 +127,9 @@ int eval_rt(char *val_str) {
     }
 
     char *endptr;
+    errno = 0;
     float val = strtof(val_str, &endptr);
 
-    errno = 0;
     if (errno != 0 || *endptr != '\0') {
         return -1;
     }
@@ -145,9 +145,9 @@ int eval_lt(char *val_str) {
     }
 
     char *endptr;
+    errno = 0;
     float val = strtof(val_str, &endptr);
 
-    errno = 0;
     if (errno != 0 || *endptr != '\0') {
         return -1;
     }

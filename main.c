@@ -4,7 +4,7 @@
 #include "raygui.h"
 int main()
 {
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib - Move Along Angle");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Llogo");
     init_llogo();
     char *log = get_command_log();
     Vector2 position = { CANVAS_WIDTH / 2.0, CANVAS_HEIGHT / 2.0 };
